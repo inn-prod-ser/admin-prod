@@ -1,0 +1,13 @@
+
+
+
+@import './courses/courses-list.css';
+@import './layouts/principal-layout.css';
+@import './navbar/navbar.css';
+@import './tools-menu/tools-menu.css';
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+

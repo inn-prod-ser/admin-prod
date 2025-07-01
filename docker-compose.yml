@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: .
+    container_name: frontend-ms
+    ports:
+      - "3040:3000"
+    volumes:
+      - ./:/app
+      - /app/node_modules
