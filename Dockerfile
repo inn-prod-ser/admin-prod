@@ -1,20 +1,24 @@
 FROM node:20-alpine AS builder
+
 WORKDIR /app
 
+ENV YARN_NODE_LINKER=node-modules
+
 COPY package.json yarn.lock ./
+
 RUN corepack enable && corepack prepare yarn@4.8.0 --activate
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 COPY . .
+
 RUN yarn build
 
 FROM node:20-alpine AS runner
+
 WORKDIR /app
 
 ENV NODE_ENV=production
-
-# ACTIVAR YARN 4 TAMBIÉN EN ESTA ETAPA, así nunca tenés problemas
-RUN corepack enable && corepack prepare yarn@4.8.0 --activate
+ENV YARN_NODE_LINKER=node-modules
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
