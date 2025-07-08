@@ -21,7 +21,7 @@ Abc12345678-
 
 
 
-mamoro1147@ofular.com
+mamoro1147@ofular.com .
 U191-
 
 430509
