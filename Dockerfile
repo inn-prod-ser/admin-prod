@@ -20,6 +20,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV YARN_NODE_LINKER=node-modules
 
+# Habilitar Corepack y Yarn en la imagen de producción
+RUN corepack enable && corepack prepare yarn@4.8.0 --activate
+
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
