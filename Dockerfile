@@ -28,18 +28,15 @@ RUN yarn build
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-ENV YARN_NODE_LINKER=node-modules
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-
 EXPOSE 3000
 
 ENV PORT=3000
 
-ENTRYPOINT ["./entrypoint.sh"]
-CMD ["node", "server.js"]
+# EL CAMBIO CLAVE Y DEFINITIVO ESTÁ AQUÍ
+# Forzamos las variables de entorno directamente en el comando de ejecución.
+CMD ["sh", "-c", "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY CLERK_SECRET_KEY=$CLERK_SECRET_KEY NEXT_PUBLIC_JWT_SECRET=$NEXT_PUBLIC_JWT_SECRET NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND node server.js"]
