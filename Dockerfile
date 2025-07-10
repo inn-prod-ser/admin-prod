@@ -28,13 +28,14 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# ESTA ES LA LÍNEA QUE FALTABA Y QUE SOLUCIONA TODO
 RUN corepack enable
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
-COPY package.json .
+
+# ESTA ES LA LÍNEA QUE FALTABA Y QUE ARREGLA EL ERROR "lockfile"
+COPY --from=builder /app/package.json /app/yarn.lock ./
 
 EXPOSE 3000
 
