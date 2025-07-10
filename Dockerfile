@@ -5,7 +5,6 @@ WORKDIR /app
 ENV YARN_NODE_LINKER=node-modules
 
 COPY package.json yarn.lock ./
-
 RUN corepack enable && corepack prepare yarn@4.8.0 --activate
 RUN yarn install --immutable
 
@@ -20,7 +19,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV YARN_NODE_LINKER=node-modules
 
-# Habilita Corepack y Yarn 4 en tiempo de ejecución
+# ✅ ACTIVÁ Corepack y Yarn 4 en el contenedor de ejecución
 RUN corepack enable && corepack prepare yarn@4.8.0 --activate
 
 COPY --from=builder /app/node_modules ./node_modules
