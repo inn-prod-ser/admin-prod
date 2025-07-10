@@ -2,18 +2,14 @@
 FROM node:20 AS builder
 WORKDIR /app
 
-# Argumentos que se reciben en el build
 ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 ARG CLERK_SECRET_KEY
-
-# Convertir los ARG a ENV para que 'yarn build' los vea
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ENV CLERK_SECRET_KEY=$CLERK_SECRET_KEY
-
-# El resto de variables no son necesarias para el build
 ARG NEXT_PUBLIC_JWT_SECRET
 ARG NEXT_PUBLIC_BACKEND
 ARG APP_VERSION
+
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV CLERK_SECRET_KEY=$CLERK_SECRET_KEY
 ENV NEXT_PUBLIC_JWT_SECRET=$NEXT_PUBLIC_JWT_SECRET
 ENV NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND
 ENV NEXT_PUBLIC_APP_VERSION=$APP_VERSION
@@ -32,7 +28,9 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copiamos los artefactos de build y las dependencias
+# ESTA ES LA LÍNEA QUE FALTABA Y QUE SOLUCIONA TODO
+RUN corepack enable
+
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
@@ -40,6 +38,4 @@ COPY package.json .
 
 EXPOSE 3000
 
-# El comando 'yarn start' (que ejecuta 'next start') leerá las variables de entorno
-# que le pases con 'docker run -e'
 CMD ["yarn", "start"]
