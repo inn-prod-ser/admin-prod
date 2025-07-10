@@ -4,6 +4,15 @@ WORKDIR /app
 
 ENV YARN_NODE_LINKER=node-modules
 
+# 👇 ARG y ENV para usar las vars en tiempo de build
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG NEXT_PUBLIC_JWT_SECRET
+ARG NEXT_PUBLIC_BACKEND
+
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV NEXT_PUBLIC_JWT_SECRET=$NEXT_PUBLIC_JWT_SECRET
+ENV NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND
+
 COPY package.json yarn.lock ./
 RUN corepack enable && corepack prepare yarn@4.8.0 --activate
 RUN yarn install --immutable
@@ -19,7 +28,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV YARN_NODE_LINKER=node-modules
 
-# ✅ ACTIVÁ Corepack y Yarn 4 en el contenedor de ejecución
 RUN corepack enable && corepack prepare yarn@4.8.0 --activate
 
 COPY --from=builder /app/node_modules ./node_modules
