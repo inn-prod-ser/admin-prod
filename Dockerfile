@@ -1,3 +1,4 @@
+# ETAPA 1: BUILDER
 FROM node:20 AS builder
 
 WORKDIR /app
@@ -23,6 +24,7 @@ COPY . .
 
 RUN yarn build
 
+# ETAPA 2: RUNNER
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
@@ -32,8 +34,12 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
 EXPOSE 3000
 
 ENV PORT=3000
 
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["node", "server.js"]
