@@ -20,7 +20,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV YARN_NODE_LINKER=node-modules
 
-# Habilitá corepack para producción
+# Habilita Corepack y Yarn 4 en tiempo de ejecución
 RUN corepack enable && corepack prepare yarn@4.8.0 --activate
 
 COPY --from=builder /app/node_modules ./node_modules
@@ -31,5 +31,4 @@ COPY --from=builder /app/yarn.lock ./yarn.lock
 
 EXPOSE 3000
 
-# Importante: Habilita corepack antes de ejecutar yarn start
-CMD ["sh", "-c", "corepack enable && yarn start"]
+CMD ["yarn", "start"]
