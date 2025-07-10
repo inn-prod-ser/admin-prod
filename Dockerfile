@@ -1,42 +1,30 @@
-# ETAPA 1: BUILDER
-FROM node:20 AS builder
+FROM node:20-alpine
+
 WORKDIR /app
 
-ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ARG CLERK_SECRET_KEY
-ARG NEXT_PUBLIC_JWT_SECRET
-ARG NEXT_PUBLIC_BACKEND
-ARG APP_VERSION
-
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ENV CLERK_SECRET_KEY=$CLERK_SECRET_KEY
-ENV NEXT_PUBLIC_JWT_SECRET=$NEXT_PUBLIC_JWT_SECRET
-ENV NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND
-ENV NEXT_PUBLIC_APP_VERSION=$APP_VERSION
-
-ENV YARN_NODE_LINKER=node-modules
-
+# 1. Copiamos los archivos de manifiesto
 COPY package.json yarn.lock ./
-RUN corepack enable && corepack prepare yarn@4.9.2 --activate
-RUN yarn install --immutable
 
-COPY . .
-RUN yarn build
-
-# ETAPA 2: RUNNER (PRODUCCIÓN)
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-
+# 2. Habilitamos la versión correcta de Yarn
 RUN corepack enable
 
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
+# 3. Instalamos TODAS las dependencias (producción y desarrollo)
+RUN yarn install
 
-# ESTA ES LA LÍNEA QUE FALTABA Y QUE ARREGLA EL ERROR "lockfile"
-COPY --from=builder /app/package.json /app/yarn.lock ./
+# 4. Copiamos el resto del código fuente
+COPY . .
 
+# 5. Pasamos los argumentos de build como variables de entorno
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG CLERK_SECRET_KEY
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV CLERK_SECRET_KEY=$CLERK_SECRET_KEY
+
+# 6. Construimos la aplicación de Next.js
+RUN yarn build
+
+# 7. Exponemos el puerto
 EXPOSE 3000
 
+# 8. El comando final que leerá las variables de 'docker run'
 CMD ["yarn", "start"]
