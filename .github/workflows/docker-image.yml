@@ -38,6 +38,7 @@ jobs:
           NEW_TAG=${{ steps.version.outputs.version }}
           docker build \
             --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }} \
+            --build-arg CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }} \
             --build-arg NEXT_PUBLIC_JWT_SECRET=${{ secrets.NEXT_PUBLIC_JWT_SECRET }} \
             --build-arg NEXT_PUBLIC_BACKEND=${{ secrets.NEXT_PUBLIC_BACKEND }} \
             --build-arg APP_VERSION=${NEW_TAG} \
