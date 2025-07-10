@@ -1,0 +1,28 @@
+.courses-list {
+  @apply flex;
+  @apply flex-col;
+  @apply px-4;
+}
+
+.courses-list__container {
+  @apply flex;
+  @apply flex-col;
+  @apply w-full;
+}
+
+.courses-list__icon {
+  @apply flex;
+  @apply items-center;
+  @apply justify-center;
+}
+
+.courses-list__label {
+  @apply flex;
+  @apply items-center;
+}
+
+.courses-list__tab-title {
+  @apply flex;
+  @apply items-center;
+  @apply space-x-3;
+}

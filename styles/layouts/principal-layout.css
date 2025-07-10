@@ -1,0 +1,15 @@
+.layout {
+  @apply min-h-screen bg-background font-sans antialiased;
+}
+
+.layout__container {
+  @apply relative flex min-h-screen items-center justify-center;
+}
+
+.layout__main {
+  @apply w-full overflow-x-hidden pt-4;
+}
+
+.layout__content {
+  @apply mx-auto max-w-[1280px];
+}
