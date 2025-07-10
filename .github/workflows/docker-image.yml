@@ -37,11 +37,14 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 5) Build: crea la imagen con tu build-arg APP_VERSION
+      # 5) Build: crea la imagen con tus build-args públicos
       - name: Build Docker image
         run: |
           NEW_TAG=${{ steps.version.outputs.version }}
           docker build \
+            --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }} \
+            --build-arg NEXT_PUBLIC_JWT_SECRET=${{ secrets.NEXT_PUBLIC_JWT_SECRET }} \
+            --build-arg NEXT_PUBLIC_BACKEND=${{ secrets.NEXT_PUBLIC_BACKEND }} \
             --build-arg APP_VERSION=${NEW_TAG} \
             -t ${{ secrets.DOCKER_REPOSITORY }}:${NEW_TAG} \
             -t ${{ secrets.DOCKER_REPOSITORY }}:latest \
