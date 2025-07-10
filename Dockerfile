@@ -2,10 +2,6 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Esta es la línea mágica que faltaba.
-# Le dice a la shell dónde buscar los comandos de Yarn.
-ENV PATH /root/.yarn/bin:$PATH
-
 # 1. Copiamos los archivos de manifiesto
 COPY package.json yarn.lock ./
 
@@ -13,7 +9,8 @@ COPY package.json yarn.lock ./
 RUN corepack enable && corepack prepare yarn@4.9.2 --activate
 
 # 3. Instalamos TODAS las dependencias (producción y desarrollo)
-RUN yarn install
+#    Usamos 'yarn dlx' para forzar la versión correcta de yarn
+RUN yarn dlx -p yarn@4.9.2 yarn install
 
 # 4. Copiamos el resto del código fuente
 COPY . .
@@ -25,13 +22,14 @@ ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 ENV CLERK_SECRET_KEY=$CLERK_SECRET_KEY
 
 # 6. Construimos la aplicación de Next.js
-RUN yarn build
+#    De nuevo, 'yarn dlx' para forzar la versión correcta
+RUN yarn dlx -p yarn@4.9.2 yarn build
 
 # 7. Preparamos para producción, eliminando dependencias de desarrollo
-RUN yarn install --production
+RUN yarn dlx -p yarn@4.9.2 yarn install --production
 
 # 8. Exponemos el puerto
 EXPOSE 3000
 
-# 9. El comando final
-CMD ["yarn", "start"]
+# 9. El comando final, forzando la versión correcta una última vez
+CMD ["yarn", "dlx", "-p", "yarn@4.9.2", "yarn", "start"]
