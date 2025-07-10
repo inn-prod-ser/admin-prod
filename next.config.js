@@ -1,9 +1,10 @@
-const createNextIntlPlugin = require( "next-intl/plugin" );
-const withNextIntl = createNextIntlPlugin( "./i18n/request.ts" );
+const createNextIntlPlugin = require("next-intl/plugin");
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig = {
-  webpack( config, { isServer } ) {
-    if ( !isServer ) {
+  output: 'standalone',
+  webpack(config, { isServer }) {
+    if (!isServer) {
       config.watchOptions = {
         poll: 1000,
         aggregateTimeout: 300,
@@ -16,4 +17,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl( nextConfig );
+module.exports = withNextIntl(nextConfig);
