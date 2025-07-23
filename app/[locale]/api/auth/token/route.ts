@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         lastName: userData.lastName,
         email: userData.email,
       },
-      process.env.NEXT_PUBLIC_JWT_SECRET || "",
+      process.env.JWT_SECRET || "",
       { expiresIn: "1h" },
     );
 
