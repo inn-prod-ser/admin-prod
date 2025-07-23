@@ -16,10 +16,4 @@ const nextConfig = {
   },
 };
 
-// Agregá turbo: false así:
-module.exports = withNextIntl( {
-  ...nextConfig,
-  experimental: {
-    turbo: false,
-  },
-} );
+module.exports = withNextIntl( nextConfig );
