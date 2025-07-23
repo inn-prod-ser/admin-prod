@@ -1,0 +1,9 @@
+.git
+Dockerfile
+docker-compose.yml
+.env
+.env.local
+coverage
+test
+.yarn
+.next
