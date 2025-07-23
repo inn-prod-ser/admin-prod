@@ -1,4 +1,4 @@
-const API_URL = "https://backend.neurabig.com";
+const API_URL = "https://backend.neurabig.com/api";
 
 
 const getToken = () => {
