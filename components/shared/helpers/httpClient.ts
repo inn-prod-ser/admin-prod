@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_BACKEND;
+const API_URL = "https://backend.neurabig.com";
 
 
 const getToken = () => {

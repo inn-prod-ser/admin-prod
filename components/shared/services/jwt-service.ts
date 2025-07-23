@@ -4,8 +4,7 @@ import { JwtUserPayload } from "../../../interfaces/auth-types";
 
 export class JwtService {
   private static readonly TOKEN_KEY = "token";
-  private static readonly BACKEND_URL =
-    process.env.NEXT_PUBLIC_BACKEND || "http://localhost:3010";
+  private static readonly BACKEND_URL ="https://backend.neurabig.com/api";
 
   static async createUserToken(
     userData: JwtUserPayload,

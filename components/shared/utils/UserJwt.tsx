@@ -34,7 +34,7 @@ export const UserJwt = () => {
         if (data.token) {
           localStorage.setItem("token", data.token);
 
-          const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/validate-token`;
+          const backendUrl = `https://backend.neurabig.com/api/auth/validate-token`;
 
           const validationResponse = await fetch(backendUrl, {
             method: "POST",
