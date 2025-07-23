@@ -3,7 +3,12 @@ FROM node:20.12.2-alpine AS builder
 WORKDIR /app
 
 COPY . .
-COPY .env.local .env.local
+
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG NEXT_PUBLIC_BACKEND
+
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND
 
 RUN corepack enable && corepack prepare yarn@4.8.0 --activate
 RUN yarn config set nodeLinker node-modules
