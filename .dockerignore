@@ -1,8 +1,10 @@
-.next
-node_modules
 .git
-docker-compose.yml
 Dockerfile
+docker-compose.yml
 .env
 .env.local
-*.log
+coverage
+test
+src
+.yarn
+.next

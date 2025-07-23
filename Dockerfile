@@ -1,13 +1,28 @@
-FROM node:22.7.0-alpine
+FROM node:20.12.2-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-
-RUN yarn install
-
 COPY . .
 
-EXPOSE 3000
+RUN corepack enable && corepack prepare yarn@4.8.0 --activate
+RUN yarn config set nodeLinker node-modules
+RUN yarn install --immutable --mode=skip-build
+RUN yarn build
 
-CMD ["yarn", "dev"]
+FROM node:20.12.2-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/yarn.lock ./yarn.lock
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/next.config.js ./next.config.js
+
+ENV NODE_ENV=production
+ENV PORT=3010
+
+EXPOSE 3010
+
+CMD ["yarn", "start"]
